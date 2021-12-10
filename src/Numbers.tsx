@@ -2,12 +2,13 @@ import React, { useEffect, useState } from 'react'
 
 const Numbers = () => {
     const [randomNumbers, setRandomNumbers] = useState<number[]>([])
-    const [userAnswers, setUserAnswers] = useState<boolean[]>([])
+    const [userAnswers, setUserAnswers] = useState<string[]>([])
     const [userNumber, setUserNumber] = useState<number>(5)
+    const [answers, setAnswers] = useState<boolean>(false)
 
-    useEffect(() => {
-        console.log(userAnswers)
-    }, [userAnswers])
+    useEffect(()=> {
+        
+    },[userAnswers])
 
     function tenNumbers() {
         setRandomNumbers([])
@@ -25,7 +26,7 @@ const Numbers = () => {
     }
 
     function correct(number:number, value:number) {
-        if(number === value) return true ; return false
+        if(number === value) return 'Rätt' ; return 'Fel'
     }
 
     function createCorrectionList(e:any) {
@@ -36,7 +37,9 @@ const Numbers = () => {
 
         newUserAnswers[id] = correct(number, value)
         setUserAnswers(newUserAnswers)
+        console.log()
     }
+    
 
     const viewNumbers = randomNumbers.map((number, i) => (
         <div key={i} className="flex">
@@ -44,11 +47,12 @@ const Numbers = () => {
             <p>+</p>
             <p>{userNumber}</p>
             <input type="text" name="answer" id={i.toString()} onChange={onChange} />
+            {answers ? <p>{userAnswers[i]}</p> : ""}
         </div>
     ))
 
-    function viewCorrect():any {
-        console.log(userAnswers)
+    function viewCorrect() {        
+        setAnswers(true)        
     }
 
     return (
