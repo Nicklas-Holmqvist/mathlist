@@ -1,3 +1,77 @@
+body {
+    padding:0;
+    margin:0;
+    box-sizing: border-box;
+    font-family: 'Permanent Marker', cursive;
+}
+
+h1 {
+    font-size: 4rem;
+    color: blue;
+}
+
+p {
+    font-size: 2rem;
+    margin:0;
+}
+
 .flex{
     display:flex;
+}
+
+.center {
+    justify-content: center;
+    align-items: center;
+}
+
+.column {
+    flex-direction: column;
+}
+
+.between {
+    justify-content: space-between;
+}
+
+.w-40 {
+    width: 40rem;
+}
+
+.w-20 {
+    width: 20rem;
+}
+
+.w-15 {
+    width: 15rem;
+}
+
+.w-10 {
+    width: 10rem;
+}
+
+.w-5 {
+    width: 5rem;
+}
+
+.w-4 {
+    width: 4rem;
+}
+
+.ml-1 {
+    margin-left: 1rem
+}
+
+.mb-2 {
+    margin-bottom: 2rem
+}
+
+.left {
+    justify-self: flex-end;
+}
+
+.bottom {
+    align-self: flex-end;
+}
+
+.number > p {
+    padding-right: 1rem
 }
