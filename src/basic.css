@@ -64,6 +64,10 @@ p {
     margin-bottom: 2rem
 }
 
+.mb-1 {
+    margin-bottom: 1rem
+}
+
 .left {
     justify-self: flex-end;
 }
@@ -74,4 +78,12 @@ p {
 
 .number > p {
     padding-right: 1rem
+}
+
+.right {
+    color:green;
+}
+
+.wrong {
+    color:red;
 }
