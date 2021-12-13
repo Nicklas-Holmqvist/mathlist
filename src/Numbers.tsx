@@ -11,23 +11,18 @@ const Numbers = () => {
     const defaultTable:number = 1
 
     const [randomNumbers, setRandomNumbers] = useState<number[]>([])
-    const [userAnswers, setUserAnswers] = useState<boolean[]>([])
-    const [userInput, setUserInput] = useState<[IUser]>([{
+    const [userAnswers, setUserAnswers] = useState<[IUser]>([{
         input: "",
         boolean: false
     }])
     const [numberTable, setNumberTable] = useState<number>(defaultTable)
-    const [answers, setAnswers] = useState<boolean>(false)
-    const [resetInput, setResetInput] = useState<boolean>(false)
-    const numberList:number[] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+    const [correctAnswers, setCorrectAnswers] = useState<boolean>(false)
+    const numberList:number[] = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+    const corrected:{right:string, wrong:string} = {right:'Rätt', wrong:'X'}
 
     useEffect(()=> {
         tenNumbers()        
     },[numberTable])
-
-    // useEffect(() => {
-    //     setResetInput(false)
-    // }, [resetInput])
     
     function tenNumbers() {
         setRandomNumbers([])  
@@ -44,19 +39,28 @@ const Numbers = () => {
        return random() * numberTable
     }
 
+    function activeBtn(id:number) {
+        if(numberTable === (id+1)) return "contained"; else return "outlined"
+    }
+
     const numberChoice = numberList.map((number, i) => (
         <div key={i}>
-            <Button variant="outlined" id={number.toString()} onClick={(e) => choice(e)}>{number}</Button>
+            <Button 
+                variant={activeBtn(i)} 
+                id={number.toString()} 
+                color='primary'
+                size='medium' 
+                onClick={(e) => choice(e)}>{number+1}
+            </Button>
         </div>
     ))
     
     function choice(e:any) {
-        const value = parseInt(e.target.innerText)          
-        setResetInput(true)   
+        console.log(e)
+        const value = parseInt(e.target.innerText)
         setNumberTable(value) 
-        setUserAnswers([])
-        setAnswers(false)
-        setUserInput([{}])
+        setUserAnswers([{}])
+        setCorrectAnswers(false)
     }    
     
     function onChange(e:any) {        
@@ -70,12 +74,8 @@ const Numbers = () => {
         
         const answer = {input: value, boolean: correct(number, value)}
         
-        const newUserInput:any = [...userInput]
-        newUserInput[id] = answer
-        setUserInput(newUserInput)
-
-        const newUserAnswers = [...userAnswers]        
-        newUserAnswers[id] = correct(number, value)        
+        const newUserAnswers:any = [...userAnswers]
+        newUserAnswers[id] = answer
         setUserAnswers(newUserAnswers)
     }        
         
@@ -84,24 +84,24 @@ const Numbers = () => {
     }
         
     const viewNumbers = randomNumbers.map((number, i) => (
-        <div key={i} className="flex w-20 between">
-            <div className="flex w-10 number">
+        <div key={i} className="flex w-30 center">
+            <div className="flex w-15 number between">
                 <p>{number}</p>
                 <p>/</p>
                 <p>{numberTable}</p>
-                <p>=</p>
+                <p className="mr-2">=</p>
             </div>            
             <div className="bottom">
                 <TextField
                     className="w-5 ml-1 left" 
                     type="text" 
-                    value={userInput[i]?.input || ""}
+                    value={userAnswers[i]?.input || ""}
                     id={i.toString()} 
                     onChange={onChange} 
                 />
             </div>                     
-            <p 
-               className={`w-5 ${userAnswers[i] ? "right" : "wrong"}`}>{ answers ? (userAnswers[i] ? 'RÄTT' : 'X') : ""}
+            <p className={`w-5 ${userAnswers[i]?.boolean ? "right" : "wrong"}`}>
+                { correctAnswers ? (userAnswers[i].boolean ? corrected.right : corrected.wrong) : ""}
             </p>
         </div>
     ))
@@ -113,20 +113,27 @@ const Numbers = () => {
         if(answers !== numbers) {
             return
         }
-        setAnswers(true)
+        setCorrectAnswers(true)
     }
 
     return (
         <div className="flex center column">
             <h1>Drilla matte!</h1>
             <p className="mb-1">Välj tabell</p>
-            <div className="flex mb-2">
+            <div className="flex wrap mb-2 w-20">
                 {numberChoice}
             </div>
             <div className="mb-2">
                 {viewNumbers}   
             </div>
-            <Button variant="contained" size="large" color="primary" onClick={viewCorrect}>Rätta</Button>
+            <Button 
+                variant="contained" 
+                size="large" 
+                color="primary" 
+                onClick={viewCorrect}
+                >
+                Rätta
+            </Button>
         </div>    
     )
 }

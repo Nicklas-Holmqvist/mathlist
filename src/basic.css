@@ -7,6 +7,7 @@ body {
 
 h1 {
     font-size: 4rem;
+    margin: 1rem 0;
     color: blue;
 }
 
@@ -32,8 +33,16 @@ p {
     justify-content: space-between;
 }
 
+.wrap {
+    flex-wrap: wrap;
+}
+
 .w-40 {
     width: 40rem;
+}
+
+.w-30 {
+    width: 30rem;
 }
 
 .w-20 {
@@ -56,8 +65,20 @@ p {
     width: 4rem;
 }
 
+.w-3 {
+    width: 3rem;
+}
+
+.w-2 {
+    width: 2rem;
+}
+
 .ml-1 {
     margin-left: 1rem
+}
+
+.mr-2 {
+    margin-right: 2rem
 }
 
 .mb-2 {
