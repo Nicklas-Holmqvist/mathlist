@@ -26,14 +26,9 @@ const Numbers = () => {
     
      
     useEffect(()=> {
-        function prepareNumbers() {
-            setRandomNumbers([])
-            for(let i = 0; i < defaultRandomNumbers; i++) {
-                setRandomNumbers(randomNumbers => [...randomNumbers, setMathNumber(mathType)])
-            }    
-        }   
-        prepareNumbers()
-    },[mathType, numberTable])
+        createNumbers()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [mathType, numberTable])
     
     /**
      * Creates numbers to be setMathNumberd
@@ -68,8 +63,7 @@ const Numbers = () => {
         }
     }
     
-    function createAddition() {    
-            
+    function createAddition() {                
         return random()
     }    
     function createSubtraction(id:number) {   
@@ -135,8 +129,7 @@ const Numbers = () => {
      * @param e values from onclick the math tables
      */
     function typeChoice(e:any) {
-        setMathType(e)        
-        createNumbers()
+        setMathType(e)
         setUserAnswers([{}])
         setCorrectAnswers(false)
     }    
