@@ -27,7 +27,7 @@ const Numbers = () => {
 
     useEffect(()=> {
         createNumbers()        
-    },[numberTable])
+    },[numberTable, mathType])
     
     /**
      * Creates numbers to be setMathNumberd
@@ -73,6 +73,37 @@ const Numbers = () => {
         return random() * numberTable
     }
 
+    function correctNumber(number:number, input:number):any {
+        switch(mathType) {
+            case 0:
+                return correctAddition(number, input)
+            case 1:                   
+                return correctSubtraction(number, input)
+            case 2:   
+                return correctMultiplication(number, input)
+            case 3:     
+                return correctDivision(number, input)
+        }
+    }
+    
+    function correctAddition(number:number, input:number) {
+        console.log((number + numberTable) === input)
+        return (number + numberTable) === input
+    }
+    
+    function correctSubtraction(number:number, input:number) {
+        return random()
+    }
+    
+    function correctMultiplication(number:number, input:number) {
+        return (number * numberTable) === input
+    }
+    
+    function correctDivision(number:number, input:number):number {
+        return random() * numberTable
+    }
+
+
     /**
      * Change the styling of onClick button to active
      * @param id of the math table
@@ -96,8 +127,10 @@ const Numbers = () => {
      * @param e values from onclick the math tables
      */
     function typeChoice(e:any) {
-        const value = e
-        setMathType(value)        
+        setMathType(e)        
+        createNumbers()
+        setUserAnswers([{}])
+        setCorrectAnswers(false)
     }    
     
     /**
@@ -130,23 +163,14 @@ const Numbers = () => {
         const id = e.target.id        
         const number = randomNumbers[id] / numberTable    
         
-        const answer = {input: value, boolean: correct(number, value)}
+        correctNumber(randomNumbers[id], value)
+        const answer = {input: value, boolean: correctNumber(randomNumbers[id], value)}
         
         const newUserAnswers:any = [...userAnswers]
         newUserAnswers[id] = answer
         setUserAnswers(newUserAnswers)
     }        
-        
-    /**
-     * Controls if the user input is true or false
-     * @param number value from number
-     * @param value value from user input
-     * @returns true or false
-     */
-    function correct(number:number, value:number) {        
-        if(number === value) return true ; return false
-    }
-    
+            
     /**
      * Component that maps out the different math types
      */
