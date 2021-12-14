@@ -8,9 +8,10 @@ export interface IUser {
     
 
 const Numbers = () => {
-    const defaultMathType:number = 1
+    const defaultMathType:number = 0
     const defaultTable:number = 1
     const defaultRandomNumbers:number = 10
+    const [isDivision, setIsDivision] = useState<boolean>(false)
 
     const [randomNumbers, setRandomNumbers] = useState<number[]>([])
     const [userAnswers, setUserAnswers] = useState<[IUser]>([{
@@ -40,35 +41,37 @@ const Numbers = () => {
     }
     
     /** Returns a random value from 1-10 */
-    function random():number {
+    function random(id?:number):number {
+        if(id === 1) return Math.floor(Math.random() * numberTable) + 1;
         return Math.floor(Math.random() * 10) + 1;
     }
 
     function setMathNumber(id:number):any {
         switch(id) {
             case 0:
+                setIsDivision(false)
                 return createAddition()
-            case 1:                   
-                return createSubtraction()
-            case 2:   
+            case 1:
+                setIsDivision(false)
+                return createSubtraction(id)
+            case 2:
+                setIsDivision(false)
                 return createMultiplication()
-            case 3:     
+            case 3:
+                setIsDivision(true)
                 return createDivision()
         }
     }
     
-    function createAddition() {
+    function createAddition() {        
         return random()
-    }
-    
-    function createSubtraction() {
-        return random()
-    }
-    
+    }    
+    function createSubtraction(id:number) {   
+        return random(id)
+    }    
     function createMultiplication() {
         return random()
-    }
-    
+    }    
     function createDivision():number {
         return random() * numberTable
     }
@@ -87,20 +90,19 @@ const Numbers = () => {
     }
     
     function correctAddition(number:number, input:number) {
-        console.log((number + numberTable) === input)
-        return (number + numberTable) === input
+        return (number + numberTable) === Number(input)
     }
     
     function correctSubtraction(number:number, input:number) {
-        return random()
+        return (numberTable - number) === Number(input)    
     }
     
     function correctMultiplication(number:number, input:number) {
-        return (number * numberTable) === input
+        return (number * numberTable) === Number(input)
     }
     
-    function correctDivision(number:number, input:number):number {
-        return random() * numberTable
+    function correctDivision(number:number, input:number) {
+        return (number / numberTable) === Number(input)
     }
 
 
@@ -159,9 +161,8 @@ const Numbers = () => {
      * @param e values from input field when onChange
      */
     function correctAnswer(e:any) {
-        const value = parseFloat(e.target.value)
-        const id = e.target.id        
-        const number = randomNumbers[id] / numberTable    
+        const value = e.target.value
+        const id = e.target.id 
         
         correctNumber(randomNumbers[id], value)
         const answer = {input: value, boolean: correctNumber(randomNumbers[id], value)}
@@ -207,15 +208,15 @@ const Numbers = () => {
     const viewNumbers = randomNumbers.map((number, i) => (
         <div key={i} className="flex w-30 center">
             <div className="flex w-15 number between">
-                <p>{number}</p>
+                <p>{isDivision ? number : numberTable}</p>
                 <p>{mathTypeList[mathType]}</p>
-                <p>{numberTable}</p>
+                <p>{isDivision ? numberTable : number}</p>
                 <p className="mr-2">=</p>
             </div>            
             <div className="bottom">
                 <TextField
                     className="w-5 ml-1 left" 
-                    type="text" 
+                    type="number" 
                     value={userAnswers[i]?.input || ""}
                     id={i.toString()} 
                     onChange={onChange} 
