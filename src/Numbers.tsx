@@ -5,7 +5,6 @@ export interface IUser {
     input?:string,
     boolean?:boolean
 }
-    
 
 const Numbers = () => {
     const defaultMathType:number = 0
@@ -25,10 +24,16 @@ const Numbers = () => {
     const numberList:number[] = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
     const corrected:{right:string, wrong:string} = {right:'Rätt', wrong:'X'}
     
-
+     
     useEffect(()=> {
-        createNumbers()        
-    },[numberTable, mathType])
+        function prepareNumbers() {
+            setRandomNumbers([])
+            for(let i = 0; i < defaultRandomNumbers; i++) {
+                setRandomNumbers(randomNumbers => [...randomNumbers, setMathNumber(mathType)])
+            }    
+        }   
+        prepareNumbers()
+    },[mathType, numberTable])
     
     /**
      * Creates numbers to be setMathNumberd
@@ -63,7 +68,8 @@ const Numbers = () => {
         }
     }
     
-    function createAddition() {        
+    function createAddition() {    
+            
         return random()
     }    
     function createSubtraction(id:number) {   
