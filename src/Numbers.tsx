@@ -13,23 +13,21 @@ const Numbers = () => {
     const [isDivision, setIsDivision] = useState<boolean>(false)
 
     const [randomNumbers, setRandomNumbers] = useState<number[]>([])
-    const [userAnswers, setUserAnswers] = useState<[IUser]>([{
-        input: "",
-        boolean: false
-    }])
+    const [userAnswers, setUserAnswers] = useState<string[]>([])
+    const [userBoolean, setUserBoolean] = useState<boolean[]>([])
     const [mathType, setMathType] = useState<number>(defaultMathType)
     const [numberTable, setNumberTable] = useState<number>(defaultTable)
     const [correctAnswers, setCorrectAnswers] = useState<boolean>(false)
+    
     const mathTypeList:string[] = ["+", "-", "x", "/"]
     const numberList:number[] = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
     const corrected:{right:string, wrong:string} = {right:'Rätt', wrong:'X'}
-    
      
     useEffect(()=> {
         createNumbers()
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [mathType, numberTable])
-    
+
     /**
      * Creates numbers to be setMathNumberd
      */
@@ -77,7 +75,7 @@ const Numbers = () => {
     }
 
     function correctNumber(number:number, input:number):any {
-        switch(mathType) {
+       switch(mathType) {
             case 0:
                 return correctAddition(number, input)
             case 1:                   
@@ -130,7 +128,7 @@ const Numbers = () => {
      */
     function typeChoice(e:any) {
         setMathType(e)
-        setUserAnswers([{}])
+        setUserAnswers([])
         setCorrectAnswers(false)
     }    
     
@@ -142,7 +140,7 @@ const Numbers = () => {
         const value = parseInt(e.target.innerText)
         setMathNumber(value)
         setNumberTable(value) 
-        setUserAnswers([{}])
+        setUserAnswers([])
         setCorrectAnswers(false)
     }    
     
@@ -163,12 +161,20 @@ const Numbers = () => {
         const value = e.target.value
         const id = e.target.id 
         
+        if(correctAnswers) {
+            setCorrectAnswers(false)
+        } 
         correctNumber(randomNumbers[id], value)
-        const answer = {input: value, boolean: correctNumber(randomNumbers[id], value)}
+        // const answer = {input: value, boolean: correctNumber(randomNumbers[id], value)}
         
         const newUserAnswers:any = [...userAnswers]
-        newUserAnswers[id] = answer
+        newUserAnswers[id] = value
         setUserAnswers(newUserAnswers)
+        
+        const newUserBoolean:any = [...userBoolean]
+        newUserBoolean[id] = correctNumber(randomNumbers[id], value)
+        setUserBoolean(newUserBoolean)
+
     }        
             
     /**
@@ -216,13 +222,13 @@ const Numbers = () => {
                 <TextField
                     className="w-5 ml-1 left" 
                     type="number" 
-                    value={userAnswers[i]?.input || ""}
+                    value={userAnswers[i] || ""}
                     id={i.toString()} 
                     onChange={onChange} 
                 />
             </div>                     
-            <p className={`w-5 ${userAnswers[i]?.boolean ? "right" : "wrong"}`}>
-                { correctAnswers ? (userAnswers[i].boolean ? corrected.right : corrected.wrong) : ""}
+            <p className={`w-5 ${userBoolean[i] ? "right" : "wrong"}`}>
+                { correctAnswers ? (userBoolean[i] ? corrected.right : corrected.wrong) : ""}
             </p>
         </div>
     ))
@@ -231,14 +237,8 @@ const Numbers = () => {
      * Display the right or wrong when onClick "Rätta"
      * @returns true or false for the answer
      */
-    function viewCorrect() {
-        const answers = userAnswers.length
-        const numbers = randomNumbers.length
-
-        if(answers !== numbers) {
-            return
-        }
-        setCorrectAnswers(true)
+    function viewCorrect() {     
+        if(!correctAnswers) return setCorrectAnswers(true)
     }
 
     return (
@@ -259,8 +259,7 @@ const Numbers = () => {
                 size="large" 
                 color="primary" 
                 onClick={viewCorrect}
-                >
-                Rätta
+            >Rätta
             </Button>
         </div>    
     )
