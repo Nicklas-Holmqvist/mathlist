@@ -1,5 +1,6 @@
 import { Button, TextField } from '@material-ui/core'
 import React, { useEffect, useState } from 'react'
+import utils from './utils'
 
 export interface IUser {
     input?:string,
@@ -48,61 +49,31 @@ const Numbers = () => {
         switch(id) {
             case 0:
                 setIsDivision(false)
-                return createAddition()
+                return random()
             case 1:
                 setIsDivision(false)
-                return createSubtraction(id)
+                return random(id)
             case 2:
                 setIsDivision(false)
-                return createMultiplication()
+                return random()
             case 3:
                 setIsDivision(true)
-                return createDivision()
+                return random() * numberTable
         }
-    }
-    
-    function createAddition() {                
-        return random()
-    }    
-    function createSubtraction(id:number) {   
-        return random(id)
-    }    
-    function createMultiplication() {
-        return random()
-    }    
-    function createDivision():number {
-        return random() * numberTable
     }
 
     function correctNumber(number:number, input:number):any {
        switch(mathType) {
             case 0:
-                return correctAddition(number, input)
+                return (number + numberTable) === Number(input)
             case 1:                   
-                return correctSubtraction(number, input)
+                return (numberTable - number) === Number(input) 
             case 2:   
-                return correctMultiplication(number, input)
+                return (number * numberTable) === Number(input)
             case 3:     
-                return correctDivision(number, input)
+                return (number / numberTable) === Number(input)
         }
     }
-    
-    function correctAddition(number:number, input:number) {
-        return (number + numberTable) === Number(input)
-    }
-    
-    function correctSubtraction(number:number, input:number) {
-        return (numberTable - number) === Number(input)    
-    }
-    
-    function correctMultiplication(number:number, input:number) {
-        return (number * numberTable) === Number(input)
-    }
-    
-    function correctDivision(number:number, input:number) {
-        return (number / numberTable) === Number(input)
-    }
-
 
     /**
      * Change the styling of onClick button to active
@@ -129,6 +100,7 @@ const Numbers = () => {
     function typeChoice(e:any) {
         setMathType(e)
         setUserAnswers([])
+        setUserBoolean([])
         setCorrectAnswers(false)
     }    
     
@@ -141,6 +113,7 @@ const Numbers = () => {
         setMathNumber(value)
         setNumberTable(value) 
         setUserAnswers([])
+        setUserBoolean([])
         setCorrectAnswers(false)
     }    
     
@@ -174,7 +147,6 @@ const Numbers = () => {
         const newUserBoolean:any = [...userBoolean]
         newUserBoolean[id] = correctNumber(randomNumbers[id], value)
         setUserBoolean(newUserBoolean)
-
     }        
             
     /**
